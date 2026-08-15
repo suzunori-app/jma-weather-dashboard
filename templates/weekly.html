@@ -24,11 +24,11 @@
 {% block content %}
 <h1>週間天気予報</h1>
 
-<form class="pref-select" method="get">
+<form class="pref-select">
   <label for="pref">都道府県:</label>
-  <select id="pref" name="pref" onchange="this.form.submit()">
+  <select id="pref" onchange="location.href = this.value">
     {% for pref in prefectures %}
-    <option value="{{ pref.code }}" {{ "selected" if pref.code == selected.code }}>{{ pref.name }}</option>
+    <option value="{{ url_for('weekly', code=pref.code) }}" {{ "selected" if pref.code == selected.code }}>{{ pref.name }}</option>
     {% endfor %}
   </select>
 </form>

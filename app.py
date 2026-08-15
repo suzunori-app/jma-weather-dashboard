@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 
 from forecast import fetch_all_temperatures, fetch_weekly
 from jma import fetch_all_overviews
@@ -27,9 +27,9 @@ def temperature():
     return render_template("temperature.html", points=points, active_page="temperature")
 
 
-@app.route("/weekly")
-def weekly():
-    code = request.args.get("pref", DEFAULT_PREFECTURE_CODE)
+@app.route("/weekly/", defaults={"code": DEFAULT_PREFECTURE_CODE})
+@app.route("/weekly/<code>")
+def weekly(code):
     if code not in PREFECTURE_CODES:
         code = DEFAULT_PREFECTURE_CODE
 

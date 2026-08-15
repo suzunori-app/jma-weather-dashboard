@@ -79,12 +79,28 @@ jma.py                  気象概況API（overview_forecast）の取得
 forecast.py             天気予報API（forecast）から気温・週間予報を抽出
 areas.py                予報区コード一覧（58区）
 prefectures.py          都道府県ごとの代表予報区コードと緯度経度（47都道府県）
+build_static.py         GitHub Pages公開用の静的HTMLスナップショット生成
 templates/base.html     共通レイアウト・タブナビゲーション
 templates/overview.html /overview ページ
 templates/temperature.html /temperature ページ
 templates/weekly.html   /weekly ページ
 tests/                  pytest によるテスト
 ```
+
+## GitHub Pages への公開
+
+GitHub Pagesは静的ファイルのみ配信可能でFlaskサーバーを実行できないため、`.github/workflows/deploy-pages.yml` が毎時（cron）・`main`へのpush・手動実行のタイミングで以下を行う。
+
+1. `build_static.py` がFlaskアプリを内部的に呼び出し、`/`・`/overview`・`/temperature`・`/weekly/`・都道府県ごとの`/weekly/{code}`をHTMLファイルとして`build/`以下に書き出す（そのため、表示される気象データはビルド時点のスナップショット）。
+2. `build/`をGitHub Pagesとしてデプロイする。
+
+初回のみ、リポジトリの Settings → Pages → Source を **GitHub Actions** に設定する必要がある。
+
+ローカルで同じスナップショットを生成する場合:
+```
+python build_static.py
+```
+`build/` に出力される。プロジェクトページ（`https://<user>.github.io/<repo>/`）以外のパスで公開する場合は、`PAGES_BASE_PATH`環境変数でベースパスを指定する（未設定時は空文字＝ルート直下）。
 
 ## 使用しているJMA API
 

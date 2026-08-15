@@ -64,7 +64,7 @@ def test_weekly():
     ]
     with patch("app.fetch_weekly", return_value=fake_days):
         client = app.test_client()
-        response = client.get("/weekly?pref=130000")
+        response = client.get("/weekly/270000")
 
     assert response.status_code == 200
     assert "東京都".encode() in response.data
@@ -77,7 +77,7 @@ def test_weekly():
 def test_weekly_unknown_pref_falls_back_to_default():
     with patch("app.fetch_weekly", return_value=[]):
         client = app.test_client()
-        response = client.get("/weekly?pref=999999")
+        response = client.get("/weekly/999999")
 
     assert response.status_code == 200
     assert "東京都".encode() in response.data
