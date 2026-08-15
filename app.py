@@ -12,7 +12,7 @@ PREFECTURE_CODES = {pref["code"] for pref in PREFECTURES}
 
 @app.route("/")
 def index():
-    return "Hello, Flask!"
+    return render_template("index.html", active_page="index")
 
 
 @app.route("/overview")

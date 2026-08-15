@@ -8,7 +8,8 @@ def test_index():
     client = app.test_client()
     response = client.get("/")
     assert response.status_code == 200
-    assert response.data == b"Hello, Flask!"
+    assert "気象庁 天気ダッシュボード".encode() in response.data
+    assert b'class="tabs"' in response.data
 
 
 def test_overview():
