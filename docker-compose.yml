@@ -7,3 +7,7 @@ services:
   test:
     build: .
     command: pytest
+
+  lint:
+    build: .
+    command: ruff check .
