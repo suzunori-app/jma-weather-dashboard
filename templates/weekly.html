@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}週間天気予報{% endblock %}
+
+{% block extra_head %}
+<style>
+  form.pref-select { margin-bottom: 1.5rem; }
+  table.weekly { border-collapse: collapse; width: 100%; }
+  table.weekly th, table.weekly td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  table.weekly thead th { background: #f0f0f0; }
+  table.weekly tbody th { background: #f8f8f8; text-align: left; }
+  table.weekly img { width: 40px; height: 40px; }
+  .temp-max { color: #c0392b; font-weight: bold; }
+  .temp-min { color: #2980b9; font-weight: bold; }
+  table.weekly th.saturday { color: #2980b9; }
+  table.weekly th.sunday-holiday { color: #c0392b; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>週間天気予報</h1>
+
+<form class="pref-select" method="get">
+  <label for="pref">都道府県:</label>
+  <select id="pref" name="pref" onchange="this.form.submit()">
+    {% for pref in prefectures %}
+    <option value="{{ pref.code }}" {{ "selected" if pref.code == selected.code }}>{{ pref.name }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+{% if days %}
+<table class="weekly">
+  <thead>
+    <tr>
+      <th>日付</th>
+      {% for day in days %}
+      <th class="{{ day.day_type }}">{{ day.date_label }}（{{ day.weekday }}）</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>天気</th>
+      {% for day in days %}
+      <td><img src="https://www.jma.go.jp/bosai/forecast/img/{{ day.weather_code }}.svg" alt="{{ day.weather_code }}"></td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <th>降水確率</th>
+      {% for day in days %}
+      <td>{{ (day.precipitation_probability ~ "%") if day.precipitation_probability else "－" }}</td>
+      {% endfor %}
+    </tr>
+    <tr>
+      <th>最高 / 最低</th>
+      {% for day in days %}
+      <td>
+        <span class="temp-max">{{ (day.max ~ "℃") if day.max else "－" }}</span>
+        /
+        <span class="temp-min">{{ (day.min ~ "℃") if day.min else "－" }}</span>
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{% else %}
+<p>{{ selected.name }}のデータを取得できませんでした。</p>
+{% endif %}
+{% endblock %}

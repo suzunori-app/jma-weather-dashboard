@@ -32,6 +32,7 @@
   <nav class="tabs">
     <a href="{{ url_for('overview') }}" class="{{ 'active' if active_page == 'overview' }}">概況</a>
     <a href="{{ url_for('temperature') }}" class="{{ 'active' if active_page == 'temperature' }}">気温マップ</a>
+    <a href="{{ url_for('weekly') }}" class="{{ 'active' if active_page == 'weekly' }}">週間予報</a>
   </nav>
   {% block content %}{% endblock %}
   {% block scripts %}{% endblock %}

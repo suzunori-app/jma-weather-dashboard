@@ -47,3 +47,36 @@ def test_temperature():
     assert response.status_code == 200
     assert json.dumps("東京都").encode() in response.data
     assert b'"max": 30' in response.data
+
+
+def test_weekly():
+    fake_days = [
+        {
+            "date_label": "8/16",
+            "weekday": "日",
+            "day_type": "sunday-holiday",
+            "weather_code": "200",
+            "precipitation_probability": "30",
+            "min": "22",
+            "max": "30",
+        },
+    ]
+    with patch("app.fetch_weekly", return_value=fake_days):
+        client = app.test_client()
+        response = client.get("/weekly?pref=130000")
+
+    assert response.status_code == 200
+    assert "東京都".encode() in response.data
+    assert "200.svg".encode() in response.data
+    assert "30%".encode() in response.data
+    assert "8/16（日）".encode() in response.data
+    assert b'class="sunday-holiday"' in response.data
+
+
+def test_weekly_unknown_pref_falls_back_to_default():
+    with patch("app.fetch_weekly", return_value=[]):
+        client = app.test_client()
+        response = client.get("/weekly?pref=999999")
+
+    assert response.status_code == 200
+    assert "東京都".encode() in response.data
