@@ -1,4 +1,6 @@
-from flask import Flask
+from flask import Flask, render_template
+
+from jma import fetch_all_overviews
 
 app = Flask(__name__)
 
@@ -6,6 +8,12 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return "Hello, Flask!"
+
+
+@app.route("/overview")
+def overview():
+    overviews = fetch_all_overviews()
+    return render_template("overview.html", overviews=overviews)
 
 
 if __name__ == "__main__":

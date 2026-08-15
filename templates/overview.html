@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>予報区別 気象概況</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; vertical-align: top; }
+    th { background: #f0f0f0; white-space: nowrap; }
+    td.text { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>予報区別 気象概況</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>予報区</th>
+        <th>発表時刻</th>
+        <th>概況</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in overviews %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.report_datetime or "取得失敗" }}</td>
+        <td class="text">{{ item.text or "取得失敗" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
