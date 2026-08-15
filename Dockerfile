@@ -10,8 +10,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
-
-# デフォルトはFlaskアプリの起動。テストを実行する場合は
-# `docker run <image> pytest` のように上書きする。
 CMD ["python", "app.py"]
